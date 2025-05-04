@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On-Page SEO Audit Tool</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <h1 class="display-4">On-Page SEO Audit Tool</h1>
+            <p class="lead">Analyze over 45 on-page SEO factors for any website</p>
+        </header>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <form id="audit-form">
+                            <div class="mb-3">
+                                <label for="url" class="form-label">Website URL</label>
+                                <input type="url" class="form-control form-control-lg" id="url" name="url" 
+                                       placeholder="https://example.com" required>
+                                <div class="form-text">Enter the full URL including https://</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="keywords" class="form-label">Target Keywords</label>
+                                <input type="text" class="form-control form-control-lg" id="keywords" name="keywords" 
+                                       placeholder="Main keyword, secondary keyword">
+                                <div class="form-text">Enter your target keywords separated by commas (optional but recommended)</div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Audit Categories</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="technical" id="technical" name="audit_types" checked>
+                                            <label class="form-check-label" for="technical">
+                                                Technical SEO
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="content" id="content" name="audit_types" checked>
+                                            <label class="form-check-label" for="content">
+                                                Content SEO
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="structured_data" id="structured_data" name="audit_types" checked>
+                                            <label class="form-check-label" for="structured_data">
+                                                Structured Data
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="links" id="links" name="audit_types" checked>
+                                            <label class="form-check-label" for="links">
+                                                Link Analysis
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="ux" id="ux" name="audit_types" checked>
+                                            <label class="form-check-label" for="ux">
+                                                UX Factors
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="advanced" id="advanced" name="audit_types" checked>
+                                            <label class="form-check-label" for="advanced">
+                                                Advanced SEO
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">Run SEO Audit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4" id="loading" style="display: none;">
+            <div class="col-md-8">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h3>Running SEO Audit...</h3>
+                        <p class="text-muted">This may take a minute or two depending on the website size.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4" id="results" style="display: none;">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="card-title">Audit Results</h2>
+                        <div id="results-content"></div>
+                        <div class="text-center mt-4">
+                            <a href="#" id="report-link" class="btn btn-success" target="_blank">View Full Report</a>
+                            <button id="new-audit-btn" class="btn btn-outline-primary ms-2">Run New Audit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-5">
+            <p class="text-muted">On-Page SEO Audit Tool &copy; 2025</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

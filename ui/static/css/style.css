@@ -1,0 +1,139 @@
+/* Main Styles for On-Page SEO Audit Tool */
+
+:root {
+    --primary-color: #4a6cf7;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* Header Styles */
+header h1 {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+header p.lead {
+    color: var(--secondary-color);
+}
+
+/* Card Styles */
+.card {
+    border-radius: 10px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Form Styles */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #3a5bd9;
+    border-color: #3a5bd9;
+}
+
+/* Results Styles */
+.status-badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+.status-good {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-warning {
+    background-color: var(--warning-color);
+    color: #212529;
+}
+
+.status-error {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.status-info {
+    background-color: var(--info-color);
+    color: white;
+}
+
+/* Summary Card Styles */
+.summary-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.summary-score {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.score-good {
+    color: var(--success-color);
+}
+
+.score-warning {
+    color: var(--warning-color);
+}
+
+.score-error {
+    color: var(--danger-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .summary-card {
+        padding: 1rem;
+    }
+}

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Audit Report for {{ url }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #2c3e50;
+        }
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            flex: 1;
+            min-width: 200px;
+            margin-right: 15px;
+        }
+        .summary-card:last-child {
+            margin-right: 0;
+        }
+        .summary-card h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .good {
+            color: #27ae60;
+        }
+        .warning {
+            color: #f39c12;
+        }
+        .error {
+            color: #e74c3c;
+        }
+        .info {
+            color: #3498db;
+        }
+        .check-item {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .check-item h4 {
+            margin-top: 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: normal;
+        }
+        .details {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .category-section {
+            margin-bottom: 40px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .summary-card {
+                min-width: 100%;
+                margin-right: 0;
+            }
+        }
+        
+        /* New styles for recommendations section */
+        .priority-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .priority-section {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .priority-section h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .recommendations-list {
+            padding-left: 20px;
+        }
+        
+        .recommendation-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recommendation-item.error strong {
+            color: #e74c3c;
+        }
+        
+        .recommendation-item.warning strong {
+            color: #f39c12;
+        }
+        
+        .recommendation-item.info strong {
+            color: #3498db;
+        }
+        
+        .action-steps {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .action-steps ul {
+            margin-bottom: 0;
+        }
+        
+        .no-issues {
+            color: #27ae60;
+            font-style: italic;
+        }
+        
+        .implementation-timeline {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .timeline-section {
+            flex: 1;
+            min-width: 250px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .timeline-section h4 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        
+        .lead {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SEO Audit Report</h1>
+        <p><strong>URL:</strong> {{ url }}</p>
+        <p><strong>Report ID:</strong> {{ report_id }}</p>
+        <p><strong>Generated:</strong> {{ timestamp }}</p>
+    </header>
+    
+    <section class="summary">
+        <div class="summary-card">
+            <h3>Overall Score</h3>
+            <div class="score {% if summary.score >= 80 %}good{% elif summary.score >= 60 %}warning{% else %}error{% endif %}">
+                {{ summary.score }}%
+            </div>
+            <p>Based on {{ summary.total_checks }} checks</p>
+        </div>
+        
+        <div class="summary-card">
+            <h3>Results Breakdown</h3>
+            <p><span class="status-badge good">Passed:</span> {{ summary.passed }}</p>
+            <p><span class="status-badge warning">Warnings:</span> {{ summary.warnings }}</p>
+            <p><span class="status-badge error">Errors:</span> {{ summary.errors }}</p>
+            <p><span class="status-badge info">Info:</span> {{ summary.info }}</p>
+        </div>
+        
+        <div class="summary-card">
+            <h3>Category Scores</h3>
+            {% for category, data in summary.category_scores.items() %}
+                <p>{{ category|capitalize }}: 
+                    <strong class="{% if data.score >= 80 %}good{% elif data.score >= 60 %}warning{% else %}error{% endif %}">
+                        {{ data.score }}%
+                    </strong>
+                </p>
+            {% endfor %}
+        </div>
+    </section>
+    
+    {% for category, category_results in audit_results.items() %}
+        <section class="category-section">
+            <h2>{{ category|capitalize }} SEO</h2>
+            
+            {% for check_name, check_data in category_results.items() %}
+                {% if check_data is mapping and check_data.status %}
+                    <div class="check-item">
+                        <h4>
+                            {{ check_name|replace('_', ' ')|capitalize }}
+                            <span class="status-badge {{ check_data.status }}">
+                                {{ check_data.status|capitalize }}
+                            </span>
+                        </h4>
+                        <p>{{ check_data.message }}</p>
+                        
+                        {% if check_data.value and check_data.value is mapping %}
+                            <div class="details">
+                                <strong>Details:</strong>
+                                <ul>
+                                    {% for key, value in check_data.value.items() %}
+                                        <li>{{ key|replace('_', ' ')|capitalize }}: {{ value }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </section>
+    {% endfor %}
+    
+    <section class="category-section">
+        <h2>Action Plan: Recommended Changes</h2>
+        <p class="lead">Below is a prioritized list of recommended changes to improve your SEO performance:</p>
+        
+        <div class="priority-sections">
+            <div class="priority-section">
+                <h3>High Priority Issues</h3>
+                <ol class="recommendations-list">
+                {% set high_priority_count = 0 %}
+                {% for category, category_results in audit_results.items() %}
+                    {% for check_name, check_data in category_results.items() %}
+                        {% if check_data is mapping and check_data.status == 'error' %}
+                            {% set high_priority_count = high_priority_count + 1 %}
+                            <li class="recommendation-item error">
+                                <strong>{{ category|capitalize }}: {{ check_name|replace('_', ' ')|capitalize }}</strong>
+                                <p>{{ check_data.message }}</p>
+                                <div class="action-steps">
+                                    <strong>How to fix:</strong>
+                                    <ul>
+                                    {% if category == 'technical' and check_name == 'status_code' %}
+                                        <li>Contact your web developer to fix server response issues</li>
+                                        <li>Check server logs for errors</li>
+                                        <li>Ensure proper redirects are in place if the page has moved</li>
+                                    {% elif category == 'technical' and check_name == 'ssl_certificate' %}
+                                        <li>Install an SSL certificate through your hosting provider</li>
+                                        <li>Ensure your certificate is properly configured and not expired</li>
+                                        <li>Update all internal links to use HTTPS</li>
+                                    {% elif category == 'content' and check_name == 'title_tag' %}
+                                        <li>Add a descriptive title tag between 50-60 characters</li>
+                                        <li>Include your primary keyword near the beginning</li>
+                                        <li>Make it compelling and relevant to the page content</li>
+                                    {% elif category == 'content' and check_name == 'meta_description' %}
+                                        <li>Add a meta description between 120-155 characters</li>
+                                        <li>Include your primary keyword and a call to action</li>
+                                        <li>Make it accurately summarize the page content</li>
+                                    {% elif category == 'structured_data' %}
+                                        <li>Implement proper schema markup using JSON-LD format</li>
+                                        <li>Test your structured data with Google's Structured Data Testing Tool</li>
+                                        <li>Ensure all required properties are included for each schema type</li>
+                                    {% else %}
+                                        <li>Review the issue details and consult with an SEO specialist</li>
+                                        <li>Prioritize fixing this issue as it significantly impacts your SEO performance</li>
+                                    {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                {% if high_priority_count == 0 %}
+                    <li class="no-issues">No high priority issues found. Great job!</li>
+                {% endif %}
+                </ol>
+            </div>
+            
+            <div class="priority-section">
+                <h3>Medium Priority Issues</h3>
+                <ol class="recommendations-list">
+                {% set medium_priority_count = 0 %}
+                {% for category, category_results in audit_results.items() %}
+                    {% for check_name, check_data in category_results.items() %}
+                        {% if check_data is mapping and check_data.status == 'warning' %}
+                            {% set medium_priority_count = medium_priority_count + 1 %}
+                            <li class="recommendation-item warning">
+                                <strong>{{ category|capitalize }}: {{ check_name|replace('_', ' ')|capitalize }}</strong>
+                                <p>{{ check_data.message }}</p>
+                                <div class="action-steps">
+                                    <strong>How to fix:</strong>
+                                    <ul>
+                                    {% if category == 'technical' and 'robots' in check_name %}
+                                        <li>Review your robots.txt file to ensure it's not blocking important content</li>
+                                        <li>Check meta robots tags on individual pages</li>
+                                        <li>Ensure search engines can access important pages</li>
+                                    {% elif category == 'content' and 'heading' in check_name %}
+                                        <li>Implement a clear heading structure (H1, H2, H3, etc.)</li>
+                                        <li>Include keywords in your headings</li>
+                                        <li>Ensure each page has exactly one H1 heading</li>
+                                    {% elif category == 'content' and 'length' in check_name %}
+                                        <li>Expand your content to at least 300 words per page</li>
+                                        <li>Focus on providing valuable, comprehensive information</li>
+                                        <li>Break up content with subheadings, lists, and images</li>
+                                    {% elif category == 'links' and 'internal' in check_name %}
+                                        <li>Add more relevant internal links to important pages</li>
+                                        <li>Use descriptive anchor text that includes keywords</li>
+                                        <li>Create a logical site structure with internal linking</li>
+                                    {% elif category == 'links' and 'external' in check_name %}
+                                        <li>Add relevant outbound links to authoritative sources</li>
+                                        <li>Use nofollow attributes for sponsored or user-generated links</li>
+                                        <li>Ensure external links open in a new tab</li>
+                                    {% elif category == 'ux' and 'mobile' in check_name %}
+                                        <li>Implement a responsive design that works on all devices</li>
+                                        <li>Add a proper viewport meta tag</li>
+                                        <li>Test your site on various mobile devices</li>
+                                    {% elif category == 'ux' and 'image' in check_name %}
+                                        <li>Add descriptive alt text to all images</li>
+                                        <li>Compress images to improve page load speed</li>
+                                        <li>Use responsive image techniques</li>
+                                    {% else %}
+                                        <li>Address this issue to improve your overall SEO performance</li>
+                                        <li>Consider consulting with an SEO specialist for specific guidance</li>
+                                    {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                {% if medium_priority_count == 0 %}
+                    <li class="no-issues">No medium priority issues found. Great job!</li>
+                {% endif %}
+                </ol>
+            </div>
+            
+            <div class="priority-section">
+                <h3>Low Priority Improvements</h3>
+                <ol class="recommendations-list">
+                {% set low_priority_count = 0 %}
+                {% for category, category_results in audit_results.items() %}
+                    {% for check_name, check_data in category_results.items() %}
+                        {% if check_data is mapping and check_data.status == 'info' %}
+                            {% set low_priority_count = low_priority_count + 1 %}
+                            <li class="recommendation-item info">
+                                <strong>{{ category|capitalize }}: {{ check_name|replace('_', ' ')|capitalize }}</strong>
+                                <p>{{ check_data.message }}</p>
+                                <div class="action-steps">
+                                    <strong>How to improve:</strong>
+                                    <ul>
+                                    {% if category == 'advanced' and 'schema' in check_name %}
+                                        <li>Consider adding more schema types relevant to your content</li>
+                                        <li>Implement FAQ, HowTo, or Product schema if applicable</li>
+                                    {% elif category == 'advanced' and 'serp' in check_name %}
+                                        <li>Optimize content for featured snippets with clear Q&A format</li>
+                                        <li>Use structured lists and tables for better SERP visibility</li>
+                                    {% elif category == 'technical' and 'sitemap' in check_name %}
+                                        <li>Create and submit an XML sitemap to search engines</li>
+                                        <li>Keep your sitemap updated with all important pages</li>
+                                    {% else %}
+                                        <li>Consider addressing this issue to further optimize your site</li>
+                                        <li>These improvements can give you an edge over competitors</li>
+                                    {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                {% if low_priority_count == 0 %}
+                    <li class="no-issues">No low priority issues found. Great job!</li>
+                {% endif %}
+                </ol>
+            </div>
+        </div>
+        
+        <div class="implementation-timeline">
+            <h3>Recommended Implementation Timeline</h3>
+            <div class="timeline">
+                <div class="timeline-section">
+                    <h4>Immediate (1-7 days)</h4>
+                    <ul>
+                        <li>Fix all high priority issues, especially technical errors</li>
+                        <li>Correct missing title tags and meta descriptions</li>
+                        <li>Fix broken links and server errors</li>
+                        <li>Ensure proper mobile viewport configuration</li>
+                    </ul>
+                </div>
+                <div class="timeline-section">
+                    <h4>Short-term (8-30 days)</h4>
+                    <ul>
+                        <li>Address all medium priority issues</li>
+                        <li>Improve content quality and length</li>
+                        <li>Enhance internal linking structure</li>
+                        <li>Implement basic structured data</li>
+                        <li>Optimize images with alt text and compression</li>
+                    </ul>
+                </div>
+                <div class="timeline-section">
+                    <h4>Long-term (31-90 days)</h4>
+                    <ul>
+                        <li>Address all low priority issues</li>
+                        <li>Implement advanced schema markup</li>
+                        <li>Optimize for SERP features</li>
+                        <li>Enhance user experience metrics</li>
+                        <li>Develop a content strategy based on keyword opportunities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>Generated by On-Page SEO Audit Tool | {{ timestamp }}</p>
+    </footer>
+</body>
+</html>
