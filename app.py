@@ -28,10 +28,10 @@ print(f"PageSpeed API Key: {GOOGLE_PAGESPEED_API_KEY}")
 # Initialize Flask app
 app = Flask(__name__, template_folder='ui/templates', static_folder='ui/static', static_url_path='/static')
 
-# Configure CORS to allow requests from Netlify
+# Configure CORS - not needed for single-domain deployment but kept for flexibility
 CORS(app, resources={
     r"/*": {
-        "origins": ["https://onpage-seo-audit-tool.netlify.app", "http://localhost:*"],
+        "origins": ["*"],
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
@@ -45,9 +45,26 @@ os.makedirs(REPORT_OUTPUT_DIR, exist_ok=True)
 def serve_report(filename):
     return send_from_directory(REPORT_OUTPUT_DIR, filename)
 
+# Add a route to serve static files explicitly
+@app.route('/static/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory('ui/static/css', filename)
+
+@app.route('/static/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory('ui/static/js', filename)
+
+@app.route('/static/img/<path:filename>')
+def serve_img(filename):
+    return send_from_directory('ui/static/img', filename)
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('ui/static', filename)
 
 @app.route('/audit', methods=['POST'])
 def run_audit():
