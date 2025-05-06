@@ -1,0 +1,9 @@
+{
+  "name": "onpage-seo-audit-functions",
+  "version": "1.0.0",
+  "description": "Netlify functions for Onpage SEO Audit Tool",
+  "main": "audit.js",
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}

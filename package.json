@@ -1,0 +1,12 @@
+{
+  "name": "onpage-seo-audit-tool",
+  "version": "1.0.0",
+  "description": "Comprehensive On-Page SEO Audit Tool",
+  "main": "index.js",
+  "scripts": {
+    "build": "node prepare_netlify.js"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.0"
+  }
+}

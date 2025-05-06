@@ -178,76 +178,58 @@ class ReportGenerator:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEO Audit Report for {{ url }}</title>
+    <title>SEO Audit Report - {{ url }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
+            margin: 0;
             padding: 20px;
+            background-color: #f5f5f5;
         }
         header {
-            background-color: #f8f9fa;
+            background-color: #4a6cf7;
+            color: white;
             padding: 20px;
             border-radius: 5px;
             margin-bottom: 20px;
         }
-        h1 {
-            color: #2c3e50;
+        header h1 {
             margin-top: 0;
-        }
-        h2 {
-            color: #3498db;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-top: 30px;
-        }
-        h3 {
-            color: #2c3e50;
         }
         .summary {
             display: flex;
-            justify-content: space-between;
             flex-wrap: wrap;
             margin-bottom: 30px;
         }
         .summary-card {
-            background-color: #fff;
+            background-color: white;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 20px;
+            margin-right: 20px;
             margin-bottom: 20px;
+            min-width: 250px;
             flex: 1;
-            min-width: 200px;
-            margin-right: 15px;
-        }
-        .summary-card:last-child {
-            margin-right: 0;
-        }
-        .summary-card h3 {
-            margin-top: 0;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
         }
         .score {
-            font-size: 2em;
+            font-size: 2.5em;
             font-weight: bold;
             text-align: center;
-            margin: 10px 0;
+            margin: 15px 0;
         }
         .good {
-            color: #27ae60;
+            color: #28a745;
         }
         .warning {
-            color: #f39c12;
+            color: #ffc107;
         }
         .error {
-            color: #e74c3c;
+            color: #dc3545;
         }
         .info {
-            color: #3498db;
+            color: #17a2b8;
         }
         .check-item {
             background-color: #fff;
@@ -287,6 +269,47 @@ class ReportGenerator:
                 margin-right: 0;
             }
         }
+        .download-pdf {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .download-pdf:hover {
+            background-color: #218838;
+        }
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                font-size: 12pt;
+            }
+            header {
+                background-color: white !important;
+                color: black;
+                padding: 0;
+            }
+            .summary-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            .check-item {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            .download-pdf {
+                display: none;
+            }
+            .no-print {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -298,6 +321,9 @@ class ReportGenerator:
         {% if keywords %}
             <p><strong>Keywords:</strong> {{ keywords|join(', ') }}</p>
         {% endif %}
+        <div class="no-print">
+            <button class="download-pdf" onclick="window.print()">Download as PDF</button>
+        </div>
     </header>
     
     <section class="summary">
@@ -349,7 +375,9 @@ class ReportGenerator:
                                 <strong>Details:</strong>
                                 <ul>
                                     {% for key, value in check_data.value.items() %}
-                                        <li>{{ key|replace('_', ' ')|capitalize }}: {{ value }}</li>
+                                        {% if value is not mapping and value is not iterable or value is string %}
+                                            <li><strong>{{ key|replace('_', ' ')|capitalize }}:</strong> {{ value }}</li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -361,8 +389,15 @@ class ReportGenerator:
     {% endfor %}
     
     <footer>
-        <p>Generated by On-Page SEO Audit Tool | {{ timestamp }}</p>
+        <p>Generated by On-Page SEO Audit Tool &copy; 2025</p>
     </footer>
+
+    <script>
+        // Add a custom filename when downloading the PDF
+        document.querySelector('.download-pdf').addEventListener('click', function() {
+            document.title = 'SEO_Audit_{{ report_id }}_{{ url|replace("http://", "")|replace("https://", "")|replace("/", "_") }}';
+        });
+    </script>
 </body>
 </html>
 '''

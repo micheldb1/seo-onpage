@@ -22,6 +22,17 @@ This tool audits over 45 on-page SEO factors for any website, providing detailed
 - Python 3.8+
 - API keys for Google Search Console, SERPAPI, and other services as specified in the config file
 
+## Deployment to Render
+
+1. Create an account on [Render](https://render.com/)
+2. Connect your GitHub repository (push your code to GitHub first)
+3. Create a new Web Service and select your repository
+4. Use the following settings:
+   - Environment: Python
+   - Build Command: `pip install -r requirements.txt && python create_nltk_files.py`
+   - Start Command: `gunicorn app:app`
+5. Add your environment variables (API keys) in the Render dashboard
+
 ## Project Structure
 
 - `app.py`: Main application entry point

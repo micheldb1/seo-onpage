@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Send request to API
-        fetch('/audit', {
+        fetch('https://seo-onpage.onrender.com/api/audit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,21 +60,29 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show results section
             resultsSection.style.display = 'block';
             
-            // Update report link
-            reportLink.href = `/static/reports/${data.report_id}.html`;
-            console.log('Report ID:', data.report_id);
-            console.log('Report Path:', data.report_path);
+            // Display results
+            displaySummaryResults(data.summary, url, requestData.keywords);
             
-            // Extract report ID from the report path if report_id is not available
-            if (!data.report_id && data.report_path) {
-                const pathParts = data.report_path.split('/');
-                const filename = pathParts[pathParts.length - 1];
-                reportLink.href = `/static/reports/${filename}`;
-                console.log('Using filename from path:', filename);
-            }
+            // Set report link
+            reportLink.href = `https://seo-onpage.onrender.com/api/reports/${data.report_id}`;
             
-            // Display summary results
-            displaySummaryResults(data.summary, data.url, requestData.keywords);
+            // Add PDF download option
+            const pdfLink = document.createElement('a');
+            pdfLink.href = reportLink.href;
+            pdfLink.className = 'btn btn-primary ms-2';
+            pdfLink.innerHTML = '<i class="bi bi-file-earmark-pdf"></i> Download PDF';
+            pdfLink.target = '_blank';
+            pdfLink.onclick = function() {
+                // Open the report in a new tab and trigger print dialog
+                const reportWindow = window.open(reportLink.href, '_blank');
+                reportWindow.addEventListener('load', function() {
+                    reportWindow.print();
+                });
+                return false;
+            };
+            
+            // Add the PDF link next to the report link
+            reportLink.parentNode.insertBefore(pdfLink, reportLink.nextSibling);
         })
         .catch(error => {
             console.error('Error:', error);

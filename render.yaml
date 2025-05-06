@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: onpage-seo-audit-tool
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python create_nltk_files.py
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.8.0
+      - key: GOOGLE_SEARCH_CONSOLE_API_KEY
+        sync: false
+      - key: SERPAPI_KEY
+        sync: false
+      - key: GOOGLE_PAGESPEED_API_KEY
+        sync: false
